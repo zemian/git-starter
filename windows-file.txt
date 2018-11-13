@@ -4,5 +4,6 @@ This file is saved with Windows line ending format.
 ```python
 
 for i in range(100):
+  print("This is a test")
   print("Hello {}".format(i), end='\r\n')
 ```
