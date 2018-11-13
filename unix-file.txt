@@ -1,0 +1,9 @@
+This file is saved with Unix line ending format.
+
+## Some code example
+
+```python
+
+for i in range(100):
+  print("Hello {}".format(i), end='\n')
+```

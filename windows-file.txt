@@ -1,0 +1,8 @@
+This file is saved with Windows line ending format.
+
+## Some code example
+```python
+
+for i in range(100):
+  print("Hello {}".format(i), end='\r\n')
+```
