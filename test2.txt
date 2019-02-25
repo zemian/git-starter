@@ -1,0 +1,1 @@
+I am a file created on Windoes OS, but manually set to LF before saving.
