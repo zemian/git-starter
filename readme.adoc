@@ -1,0 +1,275 @@
+= mygit
+
+Just a git repo to explore and learn about git
+
+== Git For Windows vs Cygwin Git vs Git Bash
+
+I like to use Cygwin on my Windows to manage most of my
+development work. However this create big confusing
+when it come to dealing with Git installations. My 
+recommendation is to use this setup:
+
+	* Use Cygwin consistently for all Windows setup.
+	* Install Git for Windows, but do not use the GitBash shell
+	  that it comes with, but to use Cygwin shell instead. All
+	  you need to do is to add the Git For Windows executable 
+	  path to Cygwin's PATH variable and you can use git as normal.
+
+Any other combination you will find some problems. I will list
+some here:
+
+* Cygwin Git - you can install git for cygwin from their
+package manager (setup.exe). This git executable is good
+and it will make your environment just like Unix and even
+the fileMode will be set properly. However if you need to
+use IDE (IntelliJ or Eclipse), they need a Windows executable
+git to work well, so now you have two copies of Git executable
+and it can get very confusing! Not to mention sometimes
+the file will get mixed up with fileMode and things just weird.
+
+* Git For Windows/GitBash - This install Git executable for Windows, but
+to use it, you need a Bash shell. The installation comes
+with a bash shell, but it's powered by MingW system. This is not
+a full POSIX system that I often found problem using simple things
+like symbolic in Windows. So this give me a shell that is' not
+optimal to work with. This is specially truen when working
+with Java project that they comes with *.sh startup script that
+often time are broken with GitBash shell.
+
+* Git For Windows/Cygwin - So my recommended setup is just this:
+Install the Git For Windows as it, but use it inside Cygwin. This
+solve many of my development problems in Windows.
+
+
+== How Git work with core.fileMode
+
+Git only has two file modes: +x or -x
+
+This flag is automaticlly set when you perform git clone
+and it usually set int .git/config file.
+
+When you working with Git for Windows, this flag is set
+to true. But if you use Cygwin Git (one install by Cygwin package), 
+then it is set to false! And if you have these two Git installed
+the files will show up as "modified" with "git status" and 
+you can't get rid off it! In these case you should use one Git
+executable consistently and reclone the repo if needed.
+
+If you are using Git for Windows and want to explicilty
+store a file with +x ON, then you can do it explicilty like this:
+
+  git add --chmod=+x myfile.txt
+
+And you can verify it by 
+
+  git log --summary myfile.txt |grep mode
+
+If you are using Git for Windows on Cygwin, the files are always
+checkout with +x. And fileMode=false is set in .git/config. This
+works out for more of the cases.
+
+If you are using Cygwin Git, then the +x should be set properly
+for when you clone and checkout and fileMode=true is set in 
+.git/config. Be consistent on using Git executable so file 
+permission won't get mixed up.
+
+
+== How Git work with core.autocrlf
+
+The `core.autocrlf` is a flag that used 
+to determine what to save (git add) into the repository, AND what
+to checkout into user working tree files.
+
+NOTE: This core.autocrlf flag is set in ~/.gitconfig globally,
+and it will not auto add in .git/config when you clone.
+
+NOTE: If you were to working with projects that need to 
+be consistent between Windows and Unix, the best choice to use
+is core.autocrlf=input.
+
+If you set `core.autocrlf=false` 
+	What to save: 
+		Git store line eding that match to your OS format!
+		(Git will not convert anything.)
+	What to checkout:
+		Git will checkout line ending that match to your OS format!
+		(Git will not convert anything.)
+
+If you set `core.autocrlf=input` 
+	What to save: 
+		Git store line eding with Unix (LF) format.
+		Git will auto convert your file if it's not LF before store,
+		but it will not touch your working tree file. 
+	What to checkout:
+		Git will checkout line ending with LF format.
+
+If you set `core.autocrlf=true` 
+	What to save: 
+		Git store line eding that match to your OS format!
+		Git will auto convert your file if it's not OS format before store,
+		but it will not touch your working tree file.
+	What to checkout:
+		Git will checkout line ending that match to your OS format!
+
+== Tips
+
+* Get commit counts
+
+  git rev-list --all --count
+
+* Get log summary since a release
+
+  git shortlog --format='%h %s' REL_10_4..
+
+== Quick Reference
+----
+git clone http://path/to/repo.git  # Retrieve a repo for work (auto checkout master branch into WorkingDir)
+git init                           # Create new repository for work (auto checkout master branch into WorkingDir)
+git init --bare                    # Create new repository without WorkingDir  - bare repo for server share only
+
+git status             # Print current status of the repo
+git branch -a          # List of all branches (including remote branches)
+git tag                # List of all tags
+git log -3                                      # Show last 3 commits
+git log -30 --oneline                           # Show last 30 commits one per line
+git log --decorate --graph --format='%h %an %s' # Show all log messages one per line in a graph
+git log --reverse |head                         # Show first commit message
+git show --stat <sha1> # Show what files changed on a commit
+git diff               # Show diff all files between Index and WorkingDir
+git diff readme.md     # Show diff of a file against Index
+git diff master..topic # Show diff between two branches
+
+git checkout -b topic               # Create a new topic branch and set as current branch
+                                      (New branch starts from previous checkout branch)
+git checkout -b topic origin/topic  # Create a new topic branch and set as current branch
+                                      (New branch starts from origin/topic "remote" branch)
+git branch --move topicA topicB     # Rename a branch
+git branch -d topic                 # Delete a branch (use -D to force it)
+git checkout master                 # Switch to master branch and set as current branch
+git merge topic                     # Merge changes from topic branch onto current branch
+
+git add .                        # Add files to Index
+git add readme.md                # Add one file to Index
+git add -A                       # Add everything to Index
+git commit -m 'topic: my change' # Commit Index changes
+
+git mv oldfile.md newfile.md     # Rename a file
+git rm outdated.md               # Remove a file from Index and WorkingDir
+git rm --cached outdated.md      # Remove a file from Index only (leave it in WorkingDir)
+
+git remote add origin http://path/to/repo.git     # Setup remote repository
+git remote set-url origin http://path/to/repo.git # Update remote repository
+git remote -v                                     # List remote repositories
+
+git push --set-upstream origin topic              # Push branch to remote first time
+git push                                          # Push branch to remote second time
+git push --all                                    # Push all the branches to remote!
+git push origin :topic                            # Push and DELETE the remote branch!
+
+git pull   # Fetch and merge the "auto tracked remote" branch onto current branch
+git fetch  # Fetch only the "auto tracked remote" branch onto current branch
+
+git checkout              # Restore WorkingDir from Index (will not override local modified files!)
+git checkout -- readme.md # Restore a single WorkingDir file from Index
+
+git reset          # Reset the HEAD and Index (same as --mixed)
+git reset --soft   # Reset the HEAD only
+git reset --hard   # Reset the HEAD, Index and WorkingDir!
+
+git reflog         # Inpect any recent transactions and can be use to recover lost (unnamed) commits
+
+git stash          # Put away all pending changes
+git stash pop      # Bring back all pending changes
+git stash list     # List all stashes
+----
+
+
+== Create a orphan branch
+ git checkout --orphan new_unrelated_topic
+
+ 
+== Update another another branch while you checkout different branch?
+
+No you can't do this. You can pull in the changes and it will be merged, but
+the other branch will still remain the same!
+
+ # Assume we are on a topic branch, this will result fetching changes from
+ # master branch and merge into topic. But local master branch will remain
+ # untouched.
+ git pull origin master
+ 
+ # To update master, you really have to switch to it!
+ git checkout master
+ git pull
+
+ 
+== What is git fetch vs git pull?
+
+Git pull is really "git fetch + git merge". So fetch command will get
+changes from remote server with out the merge part. You can do it manually
+later.
+
+A git merge on a default remote tracking branch, and if it's simple
+fast-farward merge, then no extra commit will be created.
+
+However a git merge will create a extra commit if you are fetching from a different
+branch other than the "tracked" branch itself! This is true even if your branch 
+will have a fast-farward merge with other branch. The merge will simply result
+of a tree commit changes.
+
+
+== How to checkout and autotrack remote branch?
+
+ git checkcout myremotetopic                 # Just don't use the '-b' option!
+ git checkcout -b topic origin/myremotetopic # If you still prefer to use '-b' then you must use this form
+ 
+ 
+== How to clone and checkout a branch at the same time?
+ git clone -b zemian-dev myrepo.git
+ 
+== How to remove 'remotes/git-svn' branch.
+ git branch -d -r git-svn
+ 
+ 
+== How to remove all untrack files and directories
+ git clean -d -f
+ 
+ 
+== How to list of file we suppose to ignore
+
+ git ls-files --ignored --exclude-from=.gitignore
+  
+
+== My Git Config Alias Setup
+
+.gitconfig
+----
+[user]
+	name = Zemian Deng
+	email = zemiandeng@gmail.com
+[push]
+	default = simple
+
+[alias]
+	st = status
+	br = branch
+	ci = commit -m
+	cia = commit -a -m
+	ad = add -A
+    co = checkout
+	lg = log --graph --decorate --oneline
+----
+
+
+== Renaming author name and email
+
+----
+git filter-branch --commit-filter \
+'if [ "$GIT_AUTHOR_NAME" = "Zemian Deng" ]; then \
+export GIT_AUTHOR_NAME="Zemian Deng";\
+export GIT_AUTHOR_EMAIL=zemiandeng@example.com;\
+export GIT_COMMITTER_NAME="Zemian Deng";\
+export GIT_COMMITTER_EMAIL=zemiandeng@example.com;\
+fi;\
+git commit-tree "$@"' master..topic
+----
