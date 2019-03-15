@@ -247,17 +247,18 @@ of a tree commit changes.
 [user]
 	name = Zemian Deng
 	email = zemiandeng@gmail.com
+	
 [push]
 	default = simple
 
 [alias]
 	st = status
 	br = branch
-	ci = commit -m
-	cia = commit -a -m
-	ad = add -A
-    co = checkout
-	lg = log --graph --decorate --oneline
+	ci = commit
+    co = checkout	
+	lg = log --format='%h %an %ad %s' --date=relative
+
+	lg1 = log --format='%h %an %ad %<(50,trunc)%s' --date=short -10
 ----
 
 
@@ -273,3 +274,20 @@ export GIT_COMMITTER_EMAIL=zemiandeng@example.com;\
 fi;\
 git commit-tree "$@"' master..topic
 ----
+
+== How to change file permission
+
+----
+# Git shortcuts
+gitchmod() {
+	git add --chmod=+x "$@"
+	git commit -m 'Change file mode to +x'
+	git checkout "$@"
+}
+----
+
+NOTE: After 'git add --chmod', the status of the working tree
+will list changed and untrack changes! This is becuase the update
+modified the index and the files checkout is not different. Hence after
+the commit, we need to re-checkout the files to get the new file
+permissions.
