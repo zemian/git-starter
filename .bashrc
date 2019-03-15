@@ -9,7 +9,7 @@ gitchmod() {
 }
 
 # Quick add files
-gitadd() {
-	echo git add "$@"
-	echo git commit -m \"Add $@\"
+gitci() {
+	git add "$@"
+	git commit -m \"Add $@\"
 }
