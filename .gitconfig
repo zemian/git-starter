@@ -11,3 +11,4 @@
 	ci = commit
     co = checkout	
 	lg = log --format='%h %an %ad %<(50,trunc)%s' --date=relative
+	ls = ls-tree HEAD
