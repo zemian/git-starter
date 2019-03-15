@@ -10,7 +10,7 @@ gitchmod() {
 # Quick add and commit files
 gitci() {
 	# Use default commit msg if first arg does not exists
-	MSG="Add $@"
+	MSG="Update $@"
 	if [[ ! -e $1 ]]; then
 		MSG=$1
 		shift
