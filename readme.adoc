@@ -242,25 +242,7 @@ of a tree commit changes.
 
 == My Git Config Alias Setup
 
-.gitconfig
-----
-[user]
-	name = Zemian Deng
-	email = zemiandeng@gmail.com
-	
-[push]
-	default = simple
-
-[alias]
-	st = status
-	br = branch
-	ci = commit
-    co = checkout	
-	lg = log --format='%h %an %ad %s' --date=relative
-
-	lg1 = log --format='%h %an %ad %<(50,trunc)%s' --date=short -10
-----
-
+See `.gitconfig`
 
 == Renaming author name and email
 
@@ -277,17 +259,17 @@ git commit-tree "$@"' master..topic
 
 == How to change file permission
 
-----
-# Git shortcuts
-gitchmod() {
-	git add --chmod=+x "$@"
+	git ls-tree HEAD
+	git add --chmod=+x myscript.sh
 	git commit -m 'Change file mode to +x'
-	git checkout "$@"
-}
-----
-
+	git checkout myscript.sh
+	git ls-tree HEAD
+	
 NOTE: After 'git add --chmod', the status of the working tree
 will list changed and untrack changes! This is becuase the update
 modified the index and the files checkout is not different. Hence after
 the commit, we need to re-checkout the files to get the new file
 permissions.
+
+NOTE: Alternative you can also use "git update-index --chmod=+x" instead of
+add command.

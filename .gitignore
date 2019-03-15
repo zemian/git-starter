@@ -1,8 +1,14 @@
+# Maven output
 target/
+
+# IntelliJ output
 .idea/
 *.iml
+
+# Eclipse output
 .settings/
 .classpath
 .project
 
+# Project temp work dir
 tmp/

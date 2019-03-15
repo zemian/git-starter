@@ -1,0 +1,13 @@
+[user]
+	name = Zemian Deng
+	email = zemiandeng@gmail.com
+	
+[push]
+	default = simple
+
+[alias]
+	st = status
+	br = branch
+	ci = commit
+    co = checkout	
+	lg = log --format='%h %an %ad %<(50,trunc)%s' --date=relative
