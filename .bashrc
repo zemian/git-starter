@@ -18,3 +18,14 @@ gitci() {
 	git add "$@"
 	git commit -m "$MSG"
 }
+
+# Create an empty git repo
+gitinit() {
+	git init
+echo '.DS_Store
+tmp/
+' > .gitignore
+	git add .gitignore; git commit -m 'Add ignore file'
+	touch readme.adoc
+	git add readme.adoc; git commit -m 'Add readme file'
+}
