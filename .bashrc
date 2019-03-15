@@ -10,6 +10,6 @@ gitchmod() {
 
 # Quick add files
 gitadd() {
-	git add "$@"
-	git commit -m "Add $@"
+	echo git add "$@"
+	echo git commit -m "Add $@"
 }
