@@ -24,8 +24,9 @@ gitinit() {
 	git init
 echo '.DS_Store
 tmp/
-.gradle
 target/
+.gradle
+build/
 .idea/
 *.iml
 ' > .gitignore
