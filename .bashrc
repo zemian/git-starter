@@ -24,6 +24,10 @@ gitinit() {
 	git init
 echo '.DS_Store
 tmp/
+.gradle
+target/
+.idea/
+*.iml
 ' > .gitignore
 	git add .gitignore; git commit -m 'Add ignore file'
 	touch readme.adoc
