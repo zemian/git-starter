@@ -1,0 +1,5 @@
+What Is Fossil?
+
+Fossil is a simple, high-reliability, distributed software configuration management system with these advanced features: 
+
+https://www.fossil-scm.org/
