@@ -2,3 +2,4 @@ CVS is a version control system, an important component of Source Configuration 
 
 - https://www.nongnu.org/cvs/
 - http://savannah.nongnu.org/projects/cvs
+- https://web.archive.org/web/20140629065005/http://ximbiot.com/cvs/manual/cvs-1.11.23/cvs.html
